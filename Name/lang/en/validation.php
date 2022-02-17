@@ -145,6 +145,9 @@ return [
         'attribute-name' => [
             'rule-name' => 'custom-message',
         ],
+        'password' => [
+            'required' => 'This is not good'
+        ]
     ],
 
     /*
@@ -158,6 +161,8 @@ return [
     |
     */
 
-    'attributes' => [],
+    'attributes' => [
+        'email' => 'E-mail'
+    ],
 
 ];

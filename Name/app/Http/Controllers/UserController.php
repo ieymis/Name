@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Faker\Provider\bg_BG\PhoneNumber;
+use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
@@ -38,17 +41,46 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
+        // $request->validate([
+        //     'name' => ['required','string'],
+        //     'email' => ['required', 'email', 'unique:users,email'],
+        //     'PhoneNumber' =>[ 'required' ,'phone:mobile,SA'],
+        //     'password'=>['required','min:6']
+        // ]);
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'name' => ['required','string'],
+                'email' => ['required', 'email', 'unique:users,email'],
+                'PhoneNumber' =>[ 'required' ,'phone:mobile,SA'],
+                'password'=>['required','min:6']
+            ], [
+                'required' => 'The :attribute field is required.',
+                'min' => 'The :atrribute should be greeeeeeeater than :min',
+                'phone'=> ' must be saudi number'
+            ],
+            [
+                'email' => 'E-maill'
+            ]
+        );
+
+        $validator->validate();
+
         // return User::create($request->all());
+
         return User::create([
             'name'=> $request->name,
             'age'=> $request->age,
             'PhoneNumber'=> '966'. ltrim($request->PhoneNumber, '0'),
             'gender'=> $request->gender,
             'email'=> $request->email,
-            'password'=> $request->password,
+            'password'=> Hash::make($request->password),
 
 
         ]);
+
+
+
         return 'store';
     }
 
@@ -74,7 +106,7 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        //
+        return User::where('id',$id)->get();
         return 'edit';
     }
 
@@ -88,6 +120,7 @@ class UserController extends Controller
     public function update(Request $request, $id)
     {
         //
+
         return 'update';
 
     }
